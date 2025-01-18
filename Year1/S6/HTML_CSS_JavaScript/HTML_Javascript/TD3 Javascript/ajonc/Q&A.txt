@@ -1,0 +1,54 @@
+1 Ajoutez les instructions ci-dessous et observez le résultat dans la console du navigateur.
+
+const pano = document.getElementById('panoramique');
+console.log(pano);
+
+    Que retourne la fonction getElementById ?
+
+<img id="panoramique" src="images/panoramique.jpg" alt="un panoramique vue sur la mer">
+
+
+2 Les attributs html sont des propriétés des "objets éléments". Elles peuvent être consultées ou modifiées. À l'aide de l'instruction console.log(...), visualisez ce que retourne pano.src.
+
+Avec la commande : console.log(panoramique.src) 
+
+http://127.0.0.1:5500/images/panoramique.jpg
+
+3 Ajoutez l'instruction pano.src = 'images/panoramique2.jpg'; et observez le résultat dans la page web affichée dans le navigateur. Que s'est-il passé ? Vérifiez en affichant dans la console la nouvelle valeur de pano.src.
+
+Avec la commande : panoramique.src = 'images/panoramique2.jpg';
+
+"images/panoramique2.jpg"  Et l'image est changée.
+
+4 Quelle est la valeur de l'id de la première image du document ? Vous pouvez observer que cette image n'a pas d'attribut alt défini. Vérifiez-le avec une expression javascript. Corrigez ce problème à l'aide d'une expression JavaScript donnant à cet attribut alt de cet élément la valeur "vague s'écrasant sur les rochers".
+
+l'id vaut "lamer"
+
+commande : console.log(lamer.alt)
+
+<empty string>
+
+commande : lamer.alt = "vague s'écrasant sur les rochers"
+
+"vague s'écrasant sur les rochers" 
+
+5 La propriété textContent permet un accès au contenu textuel de l'élément. Repérez dans le document l'élément d'id intro. Après avoir défini une variable intro représentant cet élément, affichez dans la console ce que retourne l'expression intro.textContent. Comparez la avec le code HTML du contenu de l'élément d'id intro dans le code source du document, quelle différence constatez-vous ?
+
+commande : intro.textContent
+"
+	La Côte d’Ajoncs se situe au coeur du pays du Trégor-Goëlo, entre l’île de Bréhat et la Côte de Granit Rose.
+  " 
+
+On remarque que l'on ne récupère que le texte et non les balises avec.
+
+6 La propriété innerHTML permet un accès au contenu HTML de l'élément. Affichez dans la console ce que retourne l'expression intro.innerHTML. Quelle différence voyez-vous avez textContent ? Sachez que l'utilisation de la propriété innerHTML est déconseillée. Nous verrons en effet qu'il existe de meilleures manières pour ajouter des éléments dans le document HTML.
+
+commande : intro.innerHTML
+'
+	La <em class="truc">Côte d’Ajoncs</em> se situe au coeur du pays du Trégor-Goëlo, entre <a href="http://fr.wikipedia.org/wiki/%C3%8Ele-de-Br%C3%A9hat">l’île de Bréhat</a> et la <a href="http://www.cotedegranitrose.fr/">Côte de Granit Rose</a>.
+
+Je constante que cette fois-ci on récupère le code html et non seulement le texte.
+
+function changeWidth(x,y) {
+    if (x.type == img)
+}

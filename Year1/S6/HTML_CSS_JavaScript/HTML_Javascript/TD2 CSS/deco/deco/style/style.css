@@ -1,0 +1,67 @@
+body {
+    font-family :  Georgia, "Times New Roman", serif;
+    background-image: url("../images/carte.png");
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+
+header {
+    background-image: url("../images/boussole-header.png");
+    box-shadow: 1px 2px 4px black;
+    color: whitesmoke;
+    text-shadow: 1px 1px 2px black;
+    font-size: 60px;
+    padding-left: 80px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+h1 {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 55px;
+    background-image: url("../images/boussole.jpg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-x: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+section {
+    background-image: url("../images/bois.png");
+    background-repeat: repeat;
+    background-size: auto;
+    box-shadow: 0px 0px 20px 5px rgb(0, 0, 0);
+    border-radius: 8px;
+    padding: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
+    margin-bottom: 30px;
+}
+
+article {
+    color: whitesmoke;
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
+    padding: 10px;
+}
+
+footer {
+    padding : 20px 0px 30px 0px;
+    background-image: url("../images/vague-h100.png");
+    background-repeat: repeat-x;
+    background-size: auto 30px;
+    background-position-y: bottom;    
+    text-align: center;
+    color: whitesmoke;
+    text-shadow: 1px 1px 2px blue;
+}
+
+@font-face{
+    font-family : "Georgia";
+    src : url("../fonts/georgia.ttf");
+}
