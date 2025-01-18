@@ -23,18 +23,6 @@ function tousVerts(tagName, root = document) {
 }
 
 
-
-const droiteElements = document.getElementsByClassName('droite');
-for (let element of droiteElements) {
-    element.style.padding = "20px";
-}
-
-const ajoncs = document.getElementById('ajoncs');
-const parElements = ajoncs.getElementsByClassName('par');
-for (let element of parElements) {
-    element.style.border = "1px solid blue";
-}
-
 function cache(className) {
     const elements = document.getElementsByClassName(className);
     for (let element of elements) {
