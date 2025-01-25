@@ -27,3 +27,11 @@ button:hover {
 	width : 40px;
 	text-align : right;
 }
+
+button.play::after {
+    content: '▶️';
+}
+
+button.pause::after {
+    content: '⏸️';
+}

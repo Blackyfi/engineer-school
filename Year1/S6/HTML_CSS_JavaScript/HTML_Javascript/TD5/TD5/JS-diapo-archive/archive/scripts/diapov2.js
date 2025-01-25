@@ -1,8 +1,9 @@
 var indiceImage = 0;
 var cheminFIchierMIeux;
+var intervalID = 0;
+var diapoEnCours = false;
 
 function afficheImage() {
-    
     const srcimage = document.getElementById('diapo');
     srcimage.src = tabImages[indiceImage];
     ip.textContent = indiceImage + 1;
@@ -12,7 +13,6 @@ function afficheImage() {
 };
 
 function imageSuivante() {
-
     if (indiceImage != tabImages.length - 1) {
         indiceImage++;
     } else {
@@ -22,7 +22,6 @@ function imageSuivante() {
 };
 
 function imagePrecedente() {
-
     if (indiceImage != 0) {
         indiceImage = indiceImage - 1;
     } else {
@@ -31,56 +30,30 @@ function imagePrecedente() {
     afficheImage();
 };
 
-const niceInput = document.getElementById('niceInput');
+function toggleDiapo() {
+    const buttonToggle = document.getElementById('toggle');
 
-var intervalID = 0;
-var delay = 0;
-var zz = 0;
-
-function suiTimeOut() {
-    delay = parseInt(niceInput.value) * 1000;
-    intervalID = setInterval(imageSuivante,delay);
-};
-
-function stopping(){
-    clearInterval(intervalID);
-};
-
-function changing() {
-    if(zz == 1) {
-        buttonLecture.removeEventListener('click');
-        buttonLecture.addEventListener('click',zz = 0);
-        suiTimeOut()
+    if (!diapoEnCours) {
+        const delay = parseInt(document.getElementById('niceInput').value) * 1000 || 2000;
+        intervalID = setInterval(imageSuivante, delay);
+        buttonToggle.textContent = "Stop";
+        buttonToggle.classList.add('pause');
+        buttonToggle.classList.remove('play');
+        diapoEnCours = true;
     } else {
-        buttonLecture.removeEventListener('click');
-        buttonLecture.addEventListener('click',zz = 1);
-        stopping()
+        clearInterval(intervalID);
+        buttonToggle.textContent = "Lecture";
+        buttonToggle.classList.add('play');
+        buttonToggle.classList.remove('pause');
+        diapoEnCours = false;
     }
 };
 
-const buttonsui = document.getElementById('button sui');
-buttonsui.addEventListener('click',imageSuivante);
-
-const buttonpre = document.getElementById('button pre');
-buttonpre.addEventListener('click',imagePrecedente);
-
-const buttonLecture = document.getElementById('Lecture');
-buttonLecture.addEventListener('click',suiTimeOut);
-
-
-const buttonStop = document.getElementById('Stop');
-buttonStop.addEventListener('click',stopping);
-
-const ip = document.getElementById('iID');
-
-const Np = document.getElementById('NID');
-
-const cheminFichier = document.getElementById('nomDuFichier');
-
+document.getElementById('toggle').addEventListener('click', toggleDiapo);
+document.getElementById('button sui').addEventListener('click', imageSuivante);
+document.getElementById('button pre').addEventListener('click', imagePrecedente);
 
 ip.textContent = indiceImage + 1;
 Np.textContent = tabImages.length;
 cheminFIchierMIeux = tabImages[indiceImage].split('/');
 cheminFichier.textContent = cheminFIchierMIeux[1];
-
-
