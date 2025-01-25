@@ -1,0 +1,31 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+#game-area {
+    position: relative;
+    width: 800px;
+    height: 600px;
+    margin: 20px auto;
+    border: 2px solid #000;
+    background-color: #eaf7ff;
+    overflow: hidden;
+}
+
+#snowman {
+    position: absolute;
+    top: 100px;
+    left: 100px;
+    width: 50px;
+}
+
+.hazelnut {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background-image: url('images/hazelnut.png');
+    background-size: cover;
+}

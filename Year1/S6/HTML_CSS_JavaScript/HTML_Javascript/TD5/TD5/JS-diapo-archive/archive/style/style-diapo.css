@@ -35,3 +35,10 @@ button.play::after {
 button.pause::after {
     content: '⏸️';
 }
+
+#diapo {
+    width: 500px;
+    height: 300px;
+    transition: opacity 1s;
+    opacity: 1;
+}
