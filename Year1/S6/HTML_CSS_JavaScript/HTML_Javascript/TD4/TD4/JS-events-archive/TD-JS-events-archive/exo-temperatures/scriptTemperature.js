@@ -30,3 +30,4 @@ butFarToCel.addEventListener("click",convertTempFromFarToCel);
 
 celsius.addEventListener("change",convertTempFromCelToFar);
 farenheit.addEventListener("change",convertTempFromFarToCel);
+
