@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+    <title> Premier diaporama</title>
+    <meta charset="UTF-8" />
+
+    <link href="style/style-diapo.css" type="text/css" rel="stylesheet" />
+
+		<!-- chargement du script -->
+	<script src="scripts/tabImages.js"></script>
+	<script src="scripts/diapov2.js" defer></script>
+
+
+  </head>
+  <body>
+	<div class="diaporama">
+		<img src="images/image.jpg" alt="un diaporama" id="diapo"/>
+	</div>
+    <input type="button" value="Bouton suivant" id="button sui" />
+    <input type="button" value="Bouton précédent" id="button pre" />
+    <input type="button" value="Lecture" id="Lecture" />
+    <input type="button" value="Stop" id="Stop" />
+
+    <input type="text" id="niceInput" name="delay value" required minlength="4" maxlength="8" size="10" />
+
+    <p id="iID">None</p><p id="NID">None</p>
+    <p id="nomDuFichier">None</p>
+  </body>
+</html>
