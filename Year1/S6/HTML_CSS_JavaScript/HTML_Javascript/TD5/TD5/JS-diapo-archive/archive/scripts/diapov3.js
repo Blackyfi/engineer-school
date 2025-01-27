@@ -1,56 +1,98 @@
-var indiceImage = 0;
-var intervalID = 0;
-var diapoEnCours = false;
+// Récupération des éléments du DOM
+const img = document.getElementById('diapo');
+const toggleButton = document.getElementById('toggle');
 
-const tabImages = [
-    "images/image1.jpg",
-    "images/image2.jpg",
-    "images/image3.jpg"
-];
+// Création des nouveaux éléments
+const infoDiv = document.createElement('div');
+const delayInput = document.createElement('input');
+const imageInfoSpan = document.createElement('span');
+const fileNameSpan = document.createElement('span');
 
-function afficheImage() {
-    const img = document.getElementById('diapo');
-    img.src = tabImages[indiceImage];
+// Configuration des nouveaux éléments
+delayInput.type = 'number';
+delayInput.min = '1';
+delayInput.value = '2';
+delayInput.style.width = '60px';
+infoDiv.appendChild(document.createTextNode('Délai (secondes): '));
+infoDiv.appendChild(delayInput);
+infoDiv.appendChild(document.createElement('br'));
+infoDiv.appendChild(imageInfoSpan);
+infoDiv.appendChild(document.createElement('br'));
+infoDiv.appendChild(fileNameSpan);
+
+// Insertion des éléments dans le DOM
+img.parentNode.insertBefore(infoDiv, img.nextSibling);
+
+// Variables de contrôle
+let currentIndex = 0;
+let intervalId = null;
+let isPlaying = false;
+
+// Fonction pour extraire le nom du fichier
+function extractFileName(path) {
+    return path.split('/').pop();
 }
 
-function attenue() {
-    const img = document.getElementById('diapo');
-    img.style.opacity = 0;
+function updateInfo() {
+    
+    imageInfoSpan.textContent = `Image ${currentIndex + 1}/${tabImages.length}`;
+    fileNameSpan.textContent = `Fichier: ${extractFileName(tabImages[currentIndex])}`;
 }
 
-function devoile() {
-    const img = document.getElementById('diapo');
-    img.style.opacity = 1;
-}
-
-
-
-
-
-function imageSuivante() {
+function changeImage() {
+    currentIndex = (currentIndex + 1) % tabImages.length;
+    img.src = tabImages[currentIndex];
     attenue();
+
     setTimeout(() => {
-        indiceImage = (indiceImage + 1) % tabImages.length;
-        afficheImage();
+        currentIndex = (currentIndex + 1) % tabImages.length;
+        img.src = tabImages[currentIndex];
+        updateInfo();
         devoile();
-    }, 1000); // Temps pour que l'atténuation soit complète
+    }, 500);
 }
 
+function startSlideshow() {
+    if (!isPlaying) {
+        const delay = parseInt(delayInput.value) * 1000;
+        intervalId = setInterval(changeImage, delay);
+        toggleButton.textContent = '⏸️';
+        isPlaying = true;
+    }
+}
 
-function toggleDiapo() {
-    const buttonToggle = document.getElementById('toggle');
+function stopSlideshow() {
+    if (isPlaying) {
+        clearInterval(intervalId);
+        toggleButton.textContent = '▶️';
+        isPlaying = false;
+    }
+}
 
-    if (!diapoEnCours) {
-        intervalID = setInterval(imageSuivante, 3000); // Change toutes les 3 secondes
-        buttonToggle.textContent = "Stop";
-        diapoEnCours = true;
+function toggleSlideshow() {
+    if (isPlaying) {
+        stopSlideshow();
     } else {
-        clearInterval(intervalID);
-        buttonToggle.textContent = "Lecture";
-        diapoEnCours = false;
+        startSlideshow();
     }
 }
 
 
+toggleButton.addEventListener('click', toggleSlideshow);
 
-document.getElementById('toggle').addEventListener('click', toggleDiapo);
+delayInput.addEventListener('change', function() {
+    if (isPlaying) {
+        stopSlideshow();
+        startSlideshow();
+    }
+});
+
+
+
+function attenue() {
+    img.style.opacity = 0;
+}
+  
+function devoile() {
+    img.style.opacity = 1;
+}

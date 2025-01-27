@@ -1,51 +1,58 @@
-function changePano() {
-    document.getElementById('panoramique').src = './images/panoramique2.jpg';
-}
+// function changePano() {
+//     document.getElementById('panoramique').src = './images/panoramique2.jpg';
+// }
 
-function changePano2() {
-    document.getElementById('panoramique').src = './images/panoramique.jpg';
-}
+// function changePano2() {
+//     document.getElementById('panoramique').src = './images/panoramique.jpg';
+// }
 
-const pano = document.getElementById("panoramique");
-pano.addEventListener("mouseover",changePano);
-pano.addEventListener("mouseout",changePano2);
+// var pano = document.getElementById("panoramique");
+// pano.addEventListener("mouseover",changePano);
+// pano.addEventListener("mouseout",changePano2);
 
 // Exercice 3
 
-var currentImage = 'images/soleil.jpg';
+const image = document.getElementById('eclipse-image');
+const increaseBtn = document.getElementById('increase');
+const decreaseBtn = document.getElementById('decrease');
+
+const MIN_WIDTH = 250;
+const MAX_WIDTH = 500;
+const STEP = 20;
+const INITIAL_IMAGE = './images/soleil.jpg';
+const ECLIPSE_IMAGE = './images/eclipse.jpg';
+
+image.style.width = '400px';
+
+let isEclipseShowing = false;
 
 function increaseSize() {
-    const img = document.getElementById('eclipse-image');
-    let currentWidth = parseInt(img.style.width);
-    if (currentWidth < 500) {
-        img.style.width = (currentWidth + 20) + 'px';
+    const currentWidth = parseInt(image.style.width);
+    if (currentWidth < MAX_WIDTH) {
+        image.style.width = `${currentWidth + STEP}px`;
     }
 }
 
 function decreaseSize() {
-    const img = document.getElementById('eclipse-image');
-    let currentWidth = parseInt(img.style.width);
-    if (currentWidth > 250) {
-        img.style.width = (currentWidth - 20) + 'px';
+    const currentWidth = parseInt(image.style.width);
+    if (currentWidth > MIN_WIDTH) {
+        image.style.width = `${currentWidth - STEP}px`;
     }
 }
 
 function toggleImage() {
-    const img = document.getElementById('eclipse-image');
-    if (currentImage === 'images/soleil.jpg') {
-        img.src = 'images/eclipse.jpg';
-        currentImage = 'images/eclipse.jpg';
+    if (!isEclipseShowing) {
+        image.src = ECLIPSE_IMAGE;
+        isEclipseShowing = true;
     } else {
-        img.src = 'images/soleil.jpg';
-        currentImage = 'images/soleil.jpg';
+        image.src = INITIAL_IMAGE;
+        isEclipseShowing = false;
     }
 }
 
-document.getElementById('increase').addEventListener('click', increaseSize);
-document.getElementById('decrease').addEventListener('click', decreaseSize);
-document.getElementById('eclipse-image').addEventListener('click', toggleImage);
-
-
+increaseBtn.addEventListener('click', increaseSize);
+decreaseBtn.addEventListener('click', decreaseSize);
+image.addEventListener('click', toggleImage);
 
 
 
@@ -53,14 +60,14 @@ document.getElementById('eclipse-image').addEventListener('click', toggleImage);
 
 // Exercice 4
 
-var clickCount = 0;
+// var clickCount = 0;
 
-function increaseCounter() {
-    clickCount += 1;
-    document.getElementById('compteur').textContent = clickCount;
-    if (clickCount >= 5) {
-        document.getElementById('poke').removeEventListener('click', increaseCounter);
-    }
-}
+// function increaseCounter() {
+//     clickCount += 1;
+//     document.getElementById('compteur').textContent = clickCount;
+//     if (clickCount >= 5) {
+//         document.getElementById('poke').removeEventListener('click', increaseCounter);
+//     }
+// }
 
-document.getElementById('poke').addEventListener('click', increaseCounter);
+// document.getElementById('poke').addEventListener('click', increaseCounter);
