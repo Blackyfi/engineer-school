@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeu de Frappe</title>
+    <link rel="stylesheet" href="./styles/style.css">
+    <script src="./scripts/script.js" defer></script>
+</head>
+<body>
+    <!-- Modal pour le pseudo -->
+    <div id="username-modal" class="modal">
+        <div class="modal-content">
+            <h2>Entrez votre pseudo</h2>
+            <input type="text" id="username-input" placeholder="Votre pseudo...">
+            <button id="submit-username">Commencer</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="game-header">
+            <img src="./images/logo_em.jpg" alt="Logo Enseirb-Matmeca" class="school-logo">
+            <h1>Jeu de Frappe</h1>
+        </div>
+
+        <div class="stats">
+            <div class="score">Score: <span id="score">0</span></div>
+            <div class="time">Temps: <span id="timer">60</span>s</div>
+            <div class="player">Joueur: <span id="player-name"></span></div>
+        </div>
+
+        <div class="game-settings">
+            <select id="difficulty">
+                <option value="easy">Facile</option>
+                <option value="medium">Moyen</option>
+                <option value="hard">Difficile</option>
+            </select>
+            <select id="game-duration">
+                <option value="20">20 secondes</option>
+                <option value="60">60 secondes</option>
+                <option value="120">120 secondes</option>
+            </select>
+            <button id="startGame">Démarrer</button>
+            <button id="pauseGame" class="orange-button">Pause</button>
+            <button id="stopGame" class="red-button">Arrêter</button>
+        </div>
+
+        <div class="game-area">
+            <div id="words-container"></div>
+            <input type="text" id="word-input" placeholder="Tapez ici..." autocomplete="off">
+        </div>
+
+        <div class="high-scores">
+            <h2>Meilleurs Scores</h2>
+            <ol id="highScoresList"></ol>
+        </div>
+    </div>
+</body>
+</html>
