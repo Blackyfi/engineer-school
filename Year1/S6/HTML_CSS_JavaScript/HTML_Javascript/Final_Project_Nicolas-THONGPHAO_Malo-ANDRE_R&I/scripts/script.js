@@ -27,8 +27,8 @@ let etatJeu = {
 };
 
 // Éléments du DOM
-const elementScore = document.getElementById('score');
-const elementTemps = document.getElementById('timer');
+const ScoreDeHTML = document.getElementById('score');
+const TempsSurHtml = document.getElementById('timer');
 const conteneurMots = document.getElementById('words-container');
 const champSaisie = document.getElementById('word-input');
 const boutonDemarrer = document.getElementById('startGame');
@@ -75,7 +75,7 @@ function demarrerJeu() {
 
     // Nettoyage de l'interface
     conteneurMots.innerHTML = '';
-    elementScore.textContent = '0';
+    ScoreDeHTML.textContent = '0';
     champSaisie.value = '';
     champSaisie.disabled = false;
     boutonDemarrer.disabled = true;
@@ -94,7 +94,7 @@ function demarrerChrono() {
     const intervalleChrono = setInterval(function() {
         if (!etatJeu.enPause && etatJeu.enCours) {
             etatJeu.tempsRestant--;
-            elementTemps.textContent = etatJeu.tempsRestant;
+            TempsSurHtml.textContent = etatJeu.tempsRestant;
 
             if (etatJeu.tempsRestant <= 0) {
                 terminerJeu();
@@ -162,7 +162,7 @@ function verifierMot(e) {
         etatJeu.motActifs.delete(motTape);
 
         etatJeu.score += motTape.length;
-        elementScore.textContent = etatJeu.score;
+        ScoreDeHTML.textContent = etatJeu.score;
 
         champSaisie.value = '';
     }
