@@ -7,10 +7,10 @@ const configuration = {
 
 // Liste des mots (à étendre)
 const listeMots = [
-    'bonjour', 'monde', 'javascript', 'programmation', 'ordinateur',
-    'jeu', 'frappe', 'vitesse', 'test', 'web', 'développement',
-    'code', 'pratique', 'apprentissage', 'clavier', 'internet',
-    'logiciel', 'application', 'défi', 'joueur'
+    'bonjour', 'aurevoir', 'wow', 'programmation', 'ordinateur',
+    'jeu', 'voiture', 'roulade', 'incroyable', 'web', 'salut',
+    'damn', 'pratique', 'backflip', 'clavier', 'internet',
+    'anticonstitutionnellement', 'application', 'rapide', 'joueur'
 ];
 
 // État du jeu
@@ -43,7 +43,7 @@ const boutonPseudo = document.getElementById('submit-username');
 const nomJoueur = document.getElementById('player-name');
 
 // Initialisation des scores
-let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores')) || [];
+let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores'));
 
 
 // Fonction pour soumettre le nom d'utilisateur
