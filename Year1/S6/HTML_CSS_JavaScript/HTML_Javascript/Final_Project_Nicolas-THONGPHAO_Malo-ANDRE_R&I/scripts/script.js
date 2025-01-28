@@ -37,7 +37,7 @@ const boutonStop = document.getElementById('stopGame');
 const selecteurDifficulte = document.getElementById('difficulty');
 const selecteurDuree = document.getElementById('game-duration');
 const listeScores = document.getElementById('highScoresList');
-const modalPseudo = document.getElementById('username-modal');
+const trucQuiCacheToutPseudo = document.getElementById('username-trucQuiCacheTout');
 const champPseudo = document.getElementById('username-input');
 const boutonPseudo = document.getElementById('submit-username');
 const nomJoueur = document.getElementById('player-name');
@@ -52,7 +52,7 @@ function soumettreNomUtilisateur() {
     if (pseudo) {
         etatJeu.pseudoJoueur = pseudo;
         nomJoueur.textContent = pseudo;
-        modalPseudo.style.display = 'none';
+        trucQuiCacheToutPseudo.style.display = 'none';
         boutonDemarrer.disabled = false;
     } else {
         alert('Veuillez entrer un pseudo valide');
