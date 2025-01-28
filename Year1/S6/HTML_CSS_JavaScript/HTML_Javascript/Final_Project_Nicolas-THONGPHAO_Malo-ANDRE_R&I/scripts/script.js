@@ -45,30 +45,6 @@ const nomJoueur = document.getElementById('player-name');
 // Initialisation des scores
 let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores')) || [];
 
-// Gestionnaires d'événements
-boutonDemarrer.addEventListener('click', function() {
-    demarrerJeu();
-});
-
-boutonPause.addEventListener('click', function() {
-    basculerPause();
-});
-
-boutonStop.addEventListener('click', function() {
-    arreterJeu();
-});
-
-champSaisie.addEventListener('input', function(e) {
-    verifierMot(e);
-});
-
-selecteurDifficulte.addEventListener('change', function(e) {
-    etatJeu.difficulte = e.target.value;
-});
-
-boutonPseudo.addEventListener('click', function() {
-    soumettreNomUtilisateur();
-});
 
 // Fonction pour soumettre le nom d'utilisateur
 function soumettreNomUtilisateur() {
@@ -130,15 +106,18 @@ function demarrerChrono() {
 
 // Fonction pour générer les mots
 function genererMots() {
+    console.log('Difficulté sélectionnée:', etatJeu.difficulte); // Debugging
+
+    const difficulte = configuration[etatJeu.difficulte] || configuration.moyen; // Fallback to 'moyen'
     const intervalleGeneration = setInterval(function() {
         if (!etatJeu.enPause && etatJeu.enCours) {
             const motsFiltres = listeMots.filter(function(mot) {
-                return mot.length <= configuration[etatJeu.difficulte].longueurMot;
+                return mot.length <= difficulte.longueurMot;
             });
             const mot = motsFiltres[Math.floor(Math.random() * motsFiltres.length)];
             creerElementMot(mot);
         }
-    }, configuration[etatJeu.difficulte].intervalle);
+    }, difficulte.intervalle);
 
     etatJeu.intervallesMots.set('generation', intervalleGeneration);
 }
@@ -274,9 +253,6 @@ function mettreAJourMeilleursScores() {
     });
     meilleursScores = meilleursScores.slice(0, 5);
     
-    // Sauvegarder dans le localStorage
-    localStorage.setItem('meilleursScores', JSON.stringify(meilleursScores));
-    
     // Mettre à jour l'affichage
     afficherMeilleursScores();
 }
@@ -308,6 +284,24 @@ function initialiserJeu() {
     // Afficher les scores existants
     afficherMeilleursScores();
 }
+
+// Gestionnaires d'événements
+boutonDemarrer.addEventListener('click', demarrerJeu);
+
+boutonPause.addEventListener('click', basculerPause);
+
+boutonStop.addEventListener('click', arreterJeu);
+
+champSaisie.addEventListener('input', verifierMot);
+
+selecteurDifficulte.addEventListener('change', changerDifficultes);
+
+function changerDifficultes(e) {
+    etatJeu.difficulte = e.target.value;
+}
+
+boutonPseudo.addEventListener('click', soumettreNomUtilisateur);
+
 
 // Lancer l'initialisation
 initialiserJeu();
