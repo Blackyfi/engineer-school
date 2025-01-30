@@ -2,7 +2,7 @@
 const configuration = {
     facile: { intervalle: 3000, longueurMot: 5 },
     moyen: { intervalle: 2000, longueurMot: 7 },
-    difficile: { intervalle: 1000, longueurMot: 9 }
+    difficile: { intervalle: 1000, longueurMot: 100 }
 };
 
 // Liste des mots (à étendre)
@@ -41,9 +41,6 @@ const trucQuiCacheToutPseudo = document.getElementById('username-trucQuiCacheTou
 const champPseudo = document.getElementById('username-input');
 const boutonPseudo = document.getElementById('submit-username');
 const nomJoueur = document.getElementById('player-name');
-
-// Initialisation des scores
-let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores'));
 
 
 // Fonction pour soumettre le nom d'utilisateur
@@ -84,6 +81,7 @@ function demarrerJeu() {
     boutonPause.disabled = false;
     boutonStop.disabled = false;
 
+
     // Démarrage du jeu
     genererMots();
     demarrerChrono();
@@ -108,16 +106,26 @@ function demarrerChrono() {
 function genererMots() {
     console.log('Difficulté sélectionnée:', etatJeu.difficulte); // Debugging
 
-    const difficulte = configuration[etatJeu.difficulte] || configuration.moyen; // Fallback to 'moyen'
+    const difficulte = configuration[etatJeu.difficulte] || configuration.moyen; // Par défaut si ça marche pas ça deviens 'moyen'
+    console.log('Intervalle de pop:', difficulte); // Debugging    
     const intervalleGeneration = setInterval(function() {
         if (!etatJeu.enPause && etatJeu.enCours) {
             const motsFiltres = listeMots.filter(function(mot) {
                 return mot.length <= difficulte.longueurMot;
             });
             const mot = motsFiltres[Math.floor(Math.random() * motsFiltres.length)];
+            console.log('Intervalle de pop:', motsFiltres); // Debugging
             creerElementMot(mot);
         }
     }, difficulte.intervalle);
+    console.log('Intervalle de pop:', listeMots); // Debugging
+
+
+    console.log('Intervalle de pop:', difficulte.longueurMot); // Debugging
+    
+    console.log('Intervalle de pop:', difficulte.intervalle); // Debugging
+    console.log('Intervalle de pop:', intervalleGeneration); // Debugging
+
 
     etatJeu.intervallesMots.set('generation', intervalleGeneration);
 }
@@ -231,27 +239,27 @@ function terminerJeu() {
     alert('Partie terminée ! Votre score : ' + etatJeu.score);
 }
 
+// Initialisation des scores avec fallback
+let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores')) || [];
+
 // Fonction pour mettre à jour les meilleurs scores
 function mettreAJourMeilleursScores() {
-    let nouveauScore = {
+    const nouveauScore = {
         score: etatJeu.score,
         difficulte: etatJeu.difficulte,
         date: new Date().toLocaleDateString(),
-        joueur: etatJeu.pseudoJoueur
+        joueur: etatJeu.pseudoJoueur,
+        pause: etatJeu.aEteMisEnPause // Simplifié la logique de pause
     };
-    
-    // Ajouter l'indication de pause si nécessaire
-    if (etatJeu.aEteMisEnPause) {
-        nouveauScore.pause = true;
-    }
     
     meilleursScores.push(nouveauScore);
     
     // Trier et garder les 5 meilleurs scores
-    meilleursScores.sort(function(a, b) {
-        return b.score - a.score;
-    });
+    meilleursScores.sort((a, b) => b.score - a.score);
     meilleursScores = meilleursScores.slice(0, 5);
+    
+    // Persister dans le localStorage
+    localStorage.setItem('meilleursScores', JSON.stringify(meilleursScores));
     
     // Mettre à jour l'affichage
     afficherMeilleursScores();
@@ -260,13 +268,23 @@ function mettreAJourMeilleursScores() {
 // Fonction pour afficher les meilleurs scores
 function afficherMeilleursScores() {
     listeScores.innerHTML = meilleursScores
-        .map(function(score) {
-            const pauseTexte = score.pause ? ' <span class="paused-score">(pause)</span>' : '';
+        .map((score, index) => {
+            const pauseTexte = score.pause ? 
+                ' <span class="paused-score">(pause)</span>' : '';
+            
+            const difficulteTraduction = {
+                'facile': 'Facile',
+                'moyen': 'Moyen',
+                'difficile': 'Difficile'
+            };
+            
             return `
-                <li>
-                    ${score.joueur} - ${score.score} points 
-                    (${score.difficulte}) - 
-                    ${score.date}${pauseTexte}
+                <li class="score-item ${index === 0 ? 'top-score' : ''}">
+                    <span class="score-player">${score.joueur}</span>
+                    <span class="score-points">${score.score} points</span>
+                    <span class="score-difficulty">${difficulteTraduction[score.difficulte] || score.difficulte}</span>
+                    <span class="score-date">${score.date}</span>
+                    ${pauseTexte}
                 </li>
             `;
         })
