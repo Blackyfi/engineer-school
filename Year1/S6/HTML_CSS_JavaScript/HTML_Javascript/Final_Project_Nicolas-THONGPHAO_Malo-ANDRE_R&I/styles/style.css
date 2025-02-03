@@ -1,23 +1,23 @@
-/* Importation de la police Doom */
+/* Police Doom */
 @font-face {
     font-family: 'DoomFont';
     src: url('https://fontmeme.com/fonts/doom-font.ttf') format('truetype');
 }
 
-/* Animations pour l'effet de feu */
-@keyframes fireMove {
+/* Animation de flammes */
+@keyframes flammes {
     0% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-10px) scale(1.1); }
     100% { transform: translateY(0) scale(1); }
 }
 
-@keyframes fireColor {
+@keyframes couleursFlammes {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* Style général */
+/* Base */
 * {
     margin: 0;
     padding: 0;
@@ -39,8 +39,8 @@ body {
     padding: 20px;
 }
 
-/* Style du trucQuiCacheTout */
-.trucQuiCacheTout {
+/* Modal */
+.trucQuiCachePourPseudo {
     display: block;
     position: fixed;
     top: 0;
@@ -51,7 +51,7 @@ body {
     z-index: 1000;
 }
 
-.trucQuiCacheTout-content {
+.boite-PseudoPourEntrer {
     background-color: #1a1a1a;
     padding: 32px;
     border-radius: 10px;
@@ -63,7 +63,7 @@ body {
     text-align: center;
 }
 
-.trucQuiCacheTout-content input {
+.boite-PseudoPourEntrer input {
     margin: 16px 0;
     padding: 8px;
     width: 100%;
@@ -72,8 +72,8 @@ body {
     color: #ff6b6b;
 }
 
-/* Style du conteneur principal */
-.container {
+/* Conteneur principal */
+.conteneur {
     width: 100%;
     max-width: 1000px;
     margin: 0 auto;
@@ -84,27 +84,27 @@ body {
     overflow: hidden;
 }
 
-/* Style de l'en-tête */
-.game-header {
+/* En-tête */
+.entete-jeu {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 32px;
 }
 
-.school-logo {
+.logo-ecole {
     height: 50px;
     margin-right: 16px;
 }
 
-h1, h2, select, .stats {
+h1, h2, select, .statistiques {
     font-family: 'DoomFont', Arial, sans-serif;
     color: #ff4444;
     text-transform: uppercase;
 }
 
-/* Style des statistiques */
-.stats {
+/* Statistiques */
+.statistiques {
     display: flex;
     justify-content: space-around;
     gap: 32px;
@@ -113,8 +113,8 @@ h1, h2, select, .stats {
     flex-wrap: wrap;
 }
 
-/* Style des paramètres du jeu */
-.game-settings {
+/* Paramètres */
+.parametres-jeu {
     display: flex;
     justify-content: center;
     gap: 16px;
@@ -133,33 +133,27 @@ select, button {
     position: relative;
 }
 
-/* Style spécial pour le sélecteur de difficulté quand "difficile" est sélectionné */
-select#difficulty {
-    transition: all 0.3s ease;
-}
-
-select#difficulty[data-value="difficile"] {
+/* Style spécial niveau difficile */
+select#niveau[data-value="difficile"] {
     background: linear-gradient(-45deg, #ff4400, #ff8800, #ff0000, #ff6600);
     background-size: 400% 400%;
-    animation: fireColor 3s ease infinite;
+    animation: couleursFlammes 3s ease infinite;
     border-color: #ff8c00;
     color: white;
-    text-shadow: 
-        0 0 10px #ff0000,
-        0 0 20px #ff4400,
-        0 0 30px #ff8800;
-    box-shadow: 
-        0 0 10px #ff4400,
-        0 0 20px #ff0000;
+    text-shadow: 0 0 10px #ff0000,
+                 0 0 20px #ff4400,
+                 0 0 30px #ff8800;
+    box-shadow: 0 0 10px #ff4400,
+                0 0 20px #ff0000;
 }
 
-select#difficulty[data-value="difficile"]::after {
+select#niveau[data-value="difficile"]::after {
     content: "🔥";
     position: absolute;
     right: -20px;
     top: 50%;
     transform: translateY(-50%);
-    animation: fireMove 1s ease-in-out infinite;
+    animation: flammes 1s ease-in-out infinite;
 }
 
 button {
@@ -175,28 +169,28 @@ button:hover {
     box-shadow: 0 0 10px #ff4444;
 }
 
-.red-button {
+.bouton-rouge {
     background-color: #660000;
 }
 
-.red-button:hover {
+.bouton-rouge:hover {
     background-color: #ff0000;
 }
 
-.orange-button {
+.bouton-orange {
     background-color: #663300;
 }
 
-.orange-button:hover {
+.bouton-orange:hover {
     background-color: #ff8c00;
 }
 
-/* Style de la zone de jeu */
-.game-area {
+/* Zone de jeu */
+.zone-jeu {
     margin: 32px 0;
 }
 
-#words-container {
+#zone-mots {
     height: 400px;
     padding: 16px;
     margin-bottom: 16px;
@@ -207,7 +201,7 @@ button:hover {
     overflow: hidden;
 }
 
-.word {
+.mot {
     display: inline-block;
     margin: 8px;
     padding: 8px;
@@ -218,7 +212,7 @@ button:hover {
     color: #ff4444;
     font-weight: bold;
     border-radius: 4px;
-    animation: slideDown 10s linear;
+    animation: descenteMot 10s linear;
     position: absolute;
     min-width: 80px;
     min-height: 80px;
@@ -226,12 +220,12 @@ button:hover {
     text-shadow: 2px 2px 4px #000;
 }
 
-@keyframes slideDown {
+@keyframes descenteMot {
     from { top: 0; }
     to { top: calc(100% - 80px); }
 }
 
-#word-input {
+#saisie-mot {
     width: 100%;
     padding: 16px;
     font-size: 19.2px;
@@ -241,22 +235,22 @@ button:hover {
     color: #ff6b6b;
 }
 
-#word-input:focus {
+#saisie-mot:focus {
     outline: none;
     border-color: #ff0000;
     box-shadow: 0 0 10px #ff4444;
 }
 
-/* Style des meilleurs scores */
-.high-scores {
+/* Tableau des scores */
+.tableau-scores {
     text-align: center;
 }
 
-.high-scores h2 {
+.tableau-scores h2 {
     margin-bottom: 16px;
 }
 
-#highScoresList {
+#liste-scores {
     list-style-position: inside;
     padding: 16px;
     background-color: rgba(0, 0, 0, 0.6);
@@ -264,12 +258,12 @@ button:hover {
     border-radius: 4px;
 }
 
-.word.expired {
+.mot.expire {
     background-color: #ff0000;
     color: #fff;
 }
 
-.paused-score {
+.score-pause {
     color: #ffa500;
 }
 
@@ -280,12 +274,8 @@ button:hover {
     border-bottom: 1px solid #ff4444;
 }
 
-
-
-
-
-/* Musique de Doom Eternal OST 22 =), un banger */
-.audio-control {
+/* Contrôles audio */
+.controle-audio {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -296,9 +286,8 @@ button:hover {
     color: #ff6b6b;
 }
 
-.audio-control input[type="checkbox"] {
+.controle-audio input[type="checkbox"] {
     appearance: none;
-    -webkit-appearance: none;
     width: 20px;
     height: 20px;
     border: 2px solid #ff4444;
@@ -308,11 +297,11 @@ button:hover {
     position: relative;
 }
 
-.audio-control input[type="checkbox"]:checked {
+.controle-audio input[type="checkbox"]:checked {
     background-color: #ff4444;
 }
 
-.audio-control input[type="checkbox"]:checked::before {
+.controle-audio input[type="checkbox"]:checked::before {
     content: "✓";
     position: absolute;
     color: #1a1a1a;
@@ -322,25 +311,18 @@ button:hover {
     transform: translate(-50%, -50%);
 }
 
-.audio-control label {
+.controle-audio label {
     cursor: pointer;
     font-family: 'DoomFont', Arial, sans-serif;
 }
 
-
-
-
-
-
-
-
-
+/* Responsive */
 @media (max-width: 768px) {
-    .container {
+    .conteneur {
         padding: 16px;
     }
     
-    .game-settings {
+    .parametres-jeu {
         gap: 8px;
     }
     
@@ -349,12 +331,12 @@ button:hover {
         font-size: 14px;
     }
     
-    .stats {
+    .statistiques {
         font-size: 16px;
         gap: 16px;
     }
     
-    #words-container {
+    #zone-mots {
         height: 300px;
     }
 }

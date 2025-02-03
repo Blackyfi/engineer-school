@@ -1,8 +1,8 @@
-// Configuration du jeu
-const configuration = {
-    facile: { intervalle: 3000, longueurMot: 5 },
-    moyen: { intervalle: 2000, longueurMot: 7 },
-    difficile: { intervalle: 1000, longueurMot: 100 }
+// Configuration par difficulté
+const CONFIG = {
+    facile: { intervalle: 3000, longueurMaxMot: 5 },
+    moyen: { intervalle: 2000, longueurMaxMot: 7 },
+    difficile: { intervalle: 1000, longueurMaxMot: 100 }
 };
 
 // Liste des mots (à étendre)
@@ -92,331 +92,377 @@ const Fruits_et_Legumes = [
     'Radis', 'Blette', 'Betterave', 'Fenouil', 'Asperge'
 ];
 
-// État du jeu
+// Déclaration de tout ce dont on a besoin niveau variables (à utiliser en priorité pour organiser et nettoyer tout aprés)
 let etatJeu = {
     score: 0,
     tempsRestant: 60,
     enCours: false,
-    motActifs: new Set(),
-    intervallesMots: new Map(),
-    difficulte: 'moyen',
+    motsActifs: new Set(),
+    intervalles: new Map(),
+    niveau: 'moyen',
     enPause: false,
-    pseudoJoueur: '',
-    aEteMisEnPause: false
+    pseudo: '',
+    utilisePause: false
 };
 
-// Éléments du DOM
-const ScoreDeHTML = document.getElementById('score');
-const TempsSurHtml = document.getElementById('timer');
-const conteneurMots = document.getElementById('words-container');
-const champSaisie = document.getElementById('word-input');
-const boutonDemarrer = document.getElementById('startGame');
-const boutonPause = document.getElementById('pauseGame');
-const boutonStop = document.getElementById('stopGame');
-const selecteurDifficulte = document.getElementById('difficulty');
-const selecteurDuree = document.getElementById('game-duration');
-const selecteurMots = document.getElementById('Words');
-const listeScores = document.getElementById('highScoresList');
-const trucQuiCacheToutPseudo = document.getElementById('username-trucQuiCacheTout');
-const champPseudo = document.getElementById('username-input');
-const boutonPseudo = document.getElementById('submit-username');
-const nomJoueur = document.getElementById('player-name');
-const audioElement = document.getElementById('gameMusic');
-const toggleMusic = document.getElementById('toggleMusic');
+// Éléments DOM
+const elements = {
+    score: document.getElementById('compteur-score'),
+    temps: document.getElementById('chronometre'),
+    zoneJeu: document.getElementById('zone-mots'),
+    champSaisie: document.getElementById('saisie-mot'),
+    btnDemarrer: document.getElementById('demarrer'),
+    btnPause: document.getElementById('pause'),
+    btnArreter: document.getElementById('arreter'),
+    selectNiveau: document.getElementById('niveau'),
+    selectDuree: document.getElementById('duree-partie'),
+    selectTheme: document.getElementById('theme-mots'),
+    listeScores: document.getElementById('liste-scores'),
+    modalPseudo: document.getElementById('pourEntrerLePseudo'),
+    champPseudo: document.getElementById('champ-pseudo'),
+    btnValiderPseudo: document.getElementById('valider-pseudo'),
+    nomJoueur: document.getElementById('nom-joueur'),
+    musique: document.getElementById('musique-jeu'),
+    toggleMusique: document.getElementById('activer-musique')
+};
 
-// Fonction pour initialiser l'audio
-function initAudio() {
-    // Charger les préférences audio depuis le localStorage
-    const musicEnabled = localStorage.getItem('musicEnabled');
-    if (musicEnabled !== null) {
-        toggleMusic.checked = musicEnabled === 'true';
+// Gestion de l'audio
+function initialiserAudio() {
+    const musiqueActive = localStorage.getItem('musiqueActive');
+    if (musiqueActive !== null) {
+        elements.toggleMusique.checked = musiqueActive === 'true';
     }
-    
-    // Gérer le volume initial
-    audioElement.volume = 0.5; // Volume à 50%
-    
-    // Mettre à jour l'état de la musique
-    updateMusicState();
+    elements.musique.volume = 0.5;
+    mettreAJourEtatMusique();
 }
 
-// Fonction pour mettre à jour l'état de la musique
-function updateMusicState() {
-    if (toggleMusic.checked) {
-        audioElement.play().catch(() => {
-            // Gérer l'erreur si le navigateur bloque l'autoplay
-            console.log('Autoplay prevented by browser');
+function mettreAJourEtatMusique() {
+    if (elements.toggleMusique.checked) {
+        elements.musique.play().catch(() => {
+            console.log('Lecture automatique bloquée par le navigateur');
         });
     } else {
-        audioElement.pause();
+        elements.musique.pause();
     }
-    
-    // Sauvegarder la préférence
-    localStorage.setItem('musicEnabled', toggleMusic.checked);
+    localStorage.setItem('musiqueActive', elements.toggleMusique.checked);
 }
 
-// Fonction pour soumettre le nom d'utilisateur
-function soumettreNomUtilisateur() {
-    const pseudo = champPseudo.value.trim();
+// Gestion du pseudo
+function validerPseudo() {
+    const pseudo = elements.champPseudo.value.trim();
     if (pseudo) {
-        etatJeu.pseudoJoueur = pseudo;
-        nomJoueur.textContent = pseudo;
-        trucQuiCacheToutPseudo.style.display = 'none';
-        boutonDemarrer.disabled = false;
+        etatJeu.pseudo = pseudo;
+        elements.nomJoueur.textContent = pseudo;
+        elements.modalPseudo.style.display = 'none';
+        elements.btnDemarrer.disabled = false;
     } else {
         alert('Veuillez entrer un pseudo valide');
     }
 }
 
-// Fonction pour démarrer le jeu
-function demarrerJeu() {
+// Gestion du jeu
+function demarrerPartie() {
     etatJeu = {
         score: 0,
-        tempsRestant: parseInt(selecteurDuree.value),
+        tempsRestant: parseInt(elements.selectDuree.value),
         enCours: true,
-        motActifs: new Set(),
-        intervallesMots: new Map(),
-        difficulte: selecteurDifficulte.value,
+        motsActifs: new Set(),
+        intervalles: new Map(),
+        niveau: elements.selectNiveau.value,
         enPause: false,
-        pseudoJoueur: etatJeu.pseudoJoueur,
-        aEteMisEnPause: false
+        pseudo: etatJeu.pseudo,
+        utilisePause: false
     };
 
-    // Nettoyage de l'interface
-    conteneurMots.innerHTML = '';
-    ScoreDeHTML.textContent = '0';
-    champSaisie.value = '';
-    champSaisie.disabled = false;
-    boutonDemarrer.disabled = true;
-    selecteurDifficulte.disabled = true;
-    selecteurDuree.disabled = true;
-    selecteurMots.disabled = true;
-    boutonPause.disabled = false;
-    boutonStop.disabled = false;
+    // Nettoyage et initialisation
+    elements.zoneJeu.innerHTML = '';
+    elements.score.textContent = '0';
+    elements.champSaisie.value = '';
+    elements.champSaisie.disabled = false;
+    elements.btnDemarrer.disabled = true;
+    elements.selectNiveau.disabled = true;
+    elements.selectDuree.disabled = true;
+    elements.selectTheme.disabled = true;
+    elements.btnPause.disabled = false;
+    elements.btnArreter.disabled = false;
 
-    // Démarrer la musique si activée
-    if (toggleMusic.checked) {
-        audioElement.play().catch(() => {
-            console.log('Autoplay prevented by browser');
+    // Démarrage de la musique
+    if (elements.toggleMusique.checked) {
+        elements.musique.play().catch(() => {
+            console.log('Lecture automatique bloquée par le navigateur');
         });
     }
 
-    if(selecteurMots.value=="Neutre"){
-        genererMots(Neutre);
-    }
-    else if(selecteurMots.value=="Pays"){
-        genererMots(Pays);
-    }
-    else if(selecteurMots.value=="Animaux"){
-        genererMots(Animaux);
-    }
-    else{
-        genererMots(Fruits_et_Legumes);
-    }
-
-    demarrerChrono();
+    // Sélection du dictionnaire de mots
+    const theme = elements.selectTheme.value;
+    genererMots(theme);
+    lancerChronometre();
 }
 
-// Fonction pour le chronomètre
-function demarrerChrono() {
-    const intervalleChrono = setInterval(function() {
+function lancerChronometre() {
+    const intervalleChrono = setInterval(() => {
         if (!etatJeu.enPause && etatJeu.enCours) {
             etatJeu.tempsRestant--;
-            TempsSurHtml.textContent = etatJeu.tempsRestant;
+            elements.temps.textContent = etatJeu.tempsRestant;
 
             if (etatJeu.tempsRestant <= 0) {
-                terminerJeu();
+                terminerPartie();
                 clearInterval(intervalleChrono);
             }
         }
     }, 1000);
 }
 
-// Fonction pour générer les mots
-function genererMots(listeMots) {
-    console.log('Difficulté sélectionnée:', etatJeu.difficulte);
+function genererMots(theme) {
+    const config = CONFIG[etatJeu.niveau];
+    let dictionnaire;
+    
+    // Sélection du dictionnaire selon le thème
+    switch(theme) {
+        case 'neutre':
+            dictionnaire = Neutre;
+            break;
+        case 'pays':
+            dictionnaire = Pays;
+            break;
+        case 'animaux':
+            dictionnaire = Animaux;
+            break;
+        case 'fruits-legumes':
+            dictionnaire = Fruits_et_Legumes;
+            break;
+        default:
+            dictionnaire = Neutre;
+    }
 
-    const difficulte = configuration[etatJeu.difficulte] || configuration.moyen;
-    console.log('Intervalle de pop:', difficulte);    
-    const intervalleGeneration = setInterval(function() {
+    const intervalleGeneration = setInterval(() => {
         if (!etatJeu.enPause && etatJeu.enCours) {
-            const motsFiltres = listeMots.filter(function(mot) {
-                return mot.length <= difficulte.longueurMot;
-            });
+            // Filtrage des mots selon la longueur maximale du niveau
+            const motsFiltres = dictionnaire.filter(mot => 
+                mot.length <= config.longueurMaxMot && 
+                !etatJeu.motsActifs.has(mot.toLowerCase())
+            );
+            
+            // Vérification s'il reste des mots disponibles
+            if (motsFiltres.length === 0) {
+                console.warn('Plus de mots disponibles pour ce niveau et cette longueur');
+                return;
+            }
+            
+            // Sélection aléatoire d'un mot
             const mot = motsFiltres[Math.floor(Math.random() * motsFiltres.length)];
-            console.log('Intervalle de pop:', motsFiltres);
             creerElementMot(mot);
         }
-    }, difficulte.intervalle);
+    }, config.intervalle);
 
-    etatJeu.intervallesMots.set('generation', intervalleGeneration);
+    etatJeu.intervalles.set('generation', intervalleGeneration);
 }
 
-// Fonction pour créer un élément mot
 function creerElementMot(mot) {
     const elementMot = document.createElement('div');
     elementMot.textContent = mot;
-    elementMot.classList.add('word');
-    elementMot.style.left = Math.random() * (conteneurMots.offsetWidth - 100) + 'px';
+    elementMot.classList.add('mot');
     
-    conteneurMots.appendChild(elementMot);
-    etatJeu.motActifs.add(mot);
+    // Positionnement aléatoire horizontal avec marge pour éviter le débordement
+    const margeSecurite = 20; // pixels de marge pour éviter le débordement
+    const maxLeft = elements.zoneJeu.offsetWidth - (elementMot.offsetWidth || 100) - margeSecurite;
+    elementMot.style.left = Math.max(margeSecurite, Math.random() * maxLeft) + 'px';
+    
+    elements.zoneJeu.appendChild(elementMot);
+    etatJeu.motsActifs.add(mot);
 
-    const intervalle = setTimeout(function() {
+    // Suppression du mot après un délai
+    const intervalle = setTimeout(() => {
         if (elementMot.parentNode) {
-            elementMot.classList.add('expired');
-            setTimeout(function() {
+            elementMot.classList.add('expire');
+            setTimeout(() => {
                 elementMot.remove();
-                etatJeu.motActifs.delete(mot);
-            }, 500);
+                etatJeu.motsActifs.delete(mot);
+            }, 500); // Délai pour l'animation d'expiration
         }
-    }, 10000);
+    }, 10000); // Durée de vie du mot
 
-    etatJeu.intervallesMots.set(mot, intervalle);
+    etatJeu.intervalles.set(mot, intervalle);
 }
 
-// Fonction pour vérifier le mot
-function verifierMot(e) {
-    const motTape = e.target.value.trim();
+function genererMots(theme) {
+    const config = CONFIG[etatJeu.niveau];
+    let dictionnaire;
+    
+    // Sélection du dictionnaire selon le thème
+    switch(theme) {
+        case 'neutre':
+            dictionnaire = Neutre;
+            break;
+        case 'pays':
+            dictionnaire = Pays;
+            break;
+        case 'animaux':
+            dictionnaire = Animaux;
+            break;
+        case 'fruits-legumes':
+            dictionnaire = Fruits_et_Legumes;
+            break;
+        default:
+            dictionnaire = Neutre;
+    }
 
-    if (etatJeu.motActifs.has(motTape)) {
-        const elements = document.querySelectorAll('.word');
-        elements.forEach(function(element) {
-            if (element.textContent === motTape) {
+    const intervalleGeneration = setInterval(() => {
+        if (!etatJeu.enPause && etatJeu.enCours) {
+            // Filtrage des mots selon la longueur maximale du niveau
+            const motsFiltres = dictionnaire.filter(mot => 
+                mot.length <= config.longueurMaxMot && 
+                !etatJeu.motsActifs.has(mot.toLowerCase())
+            );
+            
+            // Vérification s'il reste des mots disponibles
+            if (motsFiltres.length === 0) {
+                console.warn('Plus de mots disponibles pour ce niveau et cette longueur');
+                return;
+            }
+            
+            // Sélection aléatoire d'un mot
+            const mot = motsFiltres[Math.floor(Math.random() * motsFiltres.length)];
+            creerElementMot(mot);
+        }
+    }, config.intervalle);
+
+    etatJeu.intervalles.set('generation', intervalleGeneration);
+}
+
+function verifierMot(event) {
+    const motTape = event.target.value.trim().toLowerCase();
+    
+    // Vérification si le mot tapé existe dans les mots actifs (insensible à la casse)
+    const motTrouve = Array.from(etatJeu.motsActifs).find(
+        mot => mot.toLowerCase() === motTape
+    );
+
+    if (motTrouve) {
+        const elements = document.querySelectorAll('.mot');
+        elements.forEach(element => {
+            if (element.textContent.toLowerCase() === motTape) {
                 element.remove();
             }
         });
 
-        clearTimeout(etatJeu.intervallesMots.get(motTape));
-        etatJeu.intervallesMots.delete(motTape);
-        etatJeu.motActifs.delete(motTape);
+        clearTimeout(etatJeu.intervalles.get(motTrouve));
+        etatJeu.intervalles.delete(motTrouve);
+        etatJeu.motsActifs.delete(motTrouve);
 
-        etatJeu.score += motTape.length;
-        ScoreDeHTML.textContent = etatJeu.score;
+        // Attribution des points basée sur la longueur du mot original
+        etatJeu.score += motTrouve.length;
+        elements.score.textContent = etatJeu.score;
 
-        champSaisie.value = '';
+        event.target.value = '';
     }
 }
 
-// Fonction pour basculer la pause
 function basculerPause() {
     etatJeu.enPause = !etatJeu.enPause;
     if (etatJeu.enPause) {
-        boutonPause.textContent = 'Reprendre';
-        etatJeu.aEteMisEnPause = true;
-        if (toggleMusic.checked) {
-            audioElement.pause();
+        elements.btnPause.textContent = 'Reprendre';
+        etatJeu.utilisePause = true;
+        if (elements.toggleMusique.checked) {
+            elements.musique.pause();
         }
     } else {
-        boutonPause.textContent = 'Pause';
-        if (toggleMusic.checked) {
-            audioElement.play();
+        elements.btnPause.textContent = 'Pause';
+        if (elements.toggleMusique.checked) {
+            elements.musique.play();
         }
     }
-    champSaisie.disabled = etatJeu.enPause;
+    elements.champSaisie.disabled = etatJeu.enPause;
 }
 
-// Function pour arrêter le jeu
-function arreterJeu() {
+function arreterPartie() {
     if (etatJeu.enCours) {
         etatJeu.enCours = false;
         
-        // Nettoyer les intervalles
-        etatJeu.intervallesMots.forEach(function(intervalle) {
+        // Nettoyage des intervalles
+        etatJeu.intervalles.forEach(intervalle => {
             clearTimeout(intervalle);
         });
         
-        // Vider le conteneur de mots
-        conteneurMots.innerHTML = '';
+        // Nettoyage interface
+        elements.zoneJeu.innerHTML = '';
+        elements.musique.pause();
+        elements.musique.currentTime = 0;
         
-        // Arrêter la musique
-        audioElement.pause();
-        audioElement.currentTime = 0;
+        // Réinitialisation des contrôles
+        elements.champSaisie.disabled = true;
+        elements.btnDemarrer.disabled = false;
+        elements.selectNiveau.disabled = false;
+        elements.selectDuree.disabled = false;
+        elements.selectTheme.disabled = false;
+        elements.btnPause.disabled = true;
+        elements.btnArreter.disabled = true;
+        elements.btnPause.textContent = 'Pause';
         
-        // Réinitialiser l'interface
-        champSaisie.disabled = true;
-        boutonDemarrer.disabled = false;
-        selecteurDifficulte.disabled = false;
-        selecteurDuree.disabled = false;
-        selecteurMots.disabled = false;
-        boutonPause.disabled = true;
-        boutonStop.disabled = true;
-        boutonPause.textContent = 'Pause';
-        
-        // Mettre à jour les scores
-        mettreAJourMeilleursScores();
+        mettreAJourTableauScores();
     }
 }
 
-// Fonction pour terminer le jeu
-function terminerJeu() {
+function terminerPartie() {
     etatJeu.enCours = false;
-    champSaisie.disabled = true;
-    boutonDemarrer.disabled = false;
-    selecteurDifficulte.disabled = false;
-    selecteurDuree.disabled = false;
-    selecteurMots.disabled = false;
-    boutonPause.disabled = true;
-    boutonStop.disabled = true;
+    elements.champSaisie.disabled = true;
+    elements.btnDemarrer.disabled = false;
+    elements.selectNiveau.disabled = false;
+    elements.selectDuree.disabled = false;
+    elements.selectTheme.disabled = false;
+    elements.btnPause.disabled = true;
+    elements.btnArreter.disabled = true;
     
-    // Nettoyer les intervalles
-    etatJeu.intervallesMots.forEach(function(intervalle) {
+    // Nettoyage
+    etatJeu.intervalles.forEach(intervalle => {
         clearTimeout(intervalle);
     });
     
-    // Arrêter la musique
-    audioElement.pause();
-    audioElement.currentTime = 0;
+    elements.musique.pause();
+    elements.musique.currentTime = 0;
     
-    // Mettre à jour les scores
-    mettreAJourMeilleursScores();
+    mettreAJourTableauScores();
     
-    alert('Partie terminée ! Votre score : ' + etatJeu.score);
+    alert(`Partie terminée ! Votre score : ${etatJeu.score}`);
 }
 
-// Initialisation des scores avec fallback
+// Gestion des scores
 let meilleursScores = JSON.parse(localStorage.getItem('meilleursScores')) || [];
 
-// Fonction pour mettre à jour les meilleurs scores
-function mettreAJourMeilleursScores() {
+function mettreAJourTableauScores() {
     const nouveauScore = {
         score: etatJeu.score,
-        difficulte: etatJeu.difficulte,
+        niveau: etatJeu.niveau,
         date: new Date().toLocaleDateString(),
-        joueur: etatJeu.pseudoJoueur,
-        pause: etatJeu.aEteMisEnPause
+        joueur: etatJeu.pseudo,
+        pause: etatJeu.utilisePause
     };
     
     meilleursScores.push(nouveauScore);
-    
-    // Trier et garder les 5 meilleurs scores
     meilleursScores.sort((a, b) => b.score - a.score);
     meilleursScores = meilleursScores.slice(0, 5);
     
-    // Persister dans le localStorage
     localStorage.setItem('meilleursScores', JSON.stringify(meilleursScores));
-    
-    // Mettre à jour l'affichage
-    afficherMeilleursScores();
+    afficherTableauScores();
 }
 
-// Fonction pour afficher les meilleurs scores
-function afficherMeilleursScores() {
-    listeScores.innerHTML = meilleursScores
+function afficherTableauScores() {
+    elements.listeScores.innerHTML = meilleursScores
         .map((score, index) => {
             const pauseTexte = score.pause ? 
-                ' <span class="paused-score">(pause)</span>' : '';
+                ' <span class="score-pause">(pause)</span>' : '';
             
-            const difficulteTraduction = {
+            const niveaux = {
                 'facile': 'Facile',
                 'moyen': 'Moyen',
                 'difficile': 'Difficile'
             };
             
             return `
-                <li class="score-item ${index === 0 ? 'top-score' : ''}">
-                    <span class="score-player">${score.joueur}</span>
+                <li class="score-item ${index === 0 ? 'meilleur-score' : ''}">
+                    <span class="score-joueur">${score.joueur}</span>
                     <span class="score-points">${score.score} points</span>
-                    <span class="score-difficulty">${difficulteTraduction[score.difficulte] || score.difficulte}</span>
+                    <span class="score-niveau">${niveaux[score.niveau]}</span>
                     <span class="score-date">${score.date}</span>
                     ${pauseTexte}
                 </li>
@@ -425,41 +471,33 @@ function afficherMeilleursScores() {
         .join('');
 }
 
-// Initialisation au chargement de la page
+// Initialisation de base
 function initialiserJeu() {
-    // Désactiver les boutons au démarrage
-    champSaisie.disabled = true;
-    boutonDemarrer.disabled = true;
-    boutonPause.disabled = true;
-    boutonStop.disabled = true;
+    // Désactivation des contrôles
+    elements.champSaisie.disabled = true;
+    elements.btnDemarrer.disabled = true;
+    elements.btnPause.disabled = true;
+    elements.btnArreter.disabled = true;
     
-    // Initialiser l'audio
-    initAudio();
-    
-    // Afficher les scores existants
-    afficherMeilleursScores();
+    initialiserAudio();
+    afficherTableauScores();
 }
 
-// Gestionnaires d'événements
-boutonDemarrer.addEventListener('click', demarrerJeu);
-boutonPause.addEventListener('click', basculerPause);
-boutonStop.addEventListener('click', arreterJeu);
-champSaisie.addEventListener('input', verifierMot);
-selecteurDifficulte.addEventListener('change', changerDifficultes);
-toggleMusic.addEventListener('change', updateMusicState);
-boutonPseudo.addEventListener('click', soumettreNomUtilisateur);
-
-function changerDifficultes(e) {
-    etatJeu.difficulte = e.target.value;
-    e.target.setAttribute('data-value', e.target.value);
+// Changement de niveau Handler en gros
+function changerNiveau(event) {
+    etatJeu.niveau = event.target.value;
+    event.target.setAttribute('data-value', event.target.value);
 }
 
-function initDifficultyAttributes() {
-    const selectDifficulty = document.getElementById('difficulty');
-    selectDifficulty.setAttribute('data-value', selectDifficulty.value);
-}
+// Les event listeners
+elements.btnDemarrer.addEventListener('click', demarrerPartie);
+elements.btnPause.addEventListener('click', basculerPause);
+elements.btnArreter.addEventListener('click', arreterPartie);
+elements.champSaisie.addEventListener('input', verifierMot);
+elements.selectNiveau.addEventListener('change', changerNiveau);
+elements.toggleMusique.addEventListener('change', mettreAJourEtatMusique);
+elements.btnValiderPseudo.addEventListener('click', validerPseudo);
 
-document.addEventListener('DOMContentLoaded', initDifficultyAttributes);
-
-// Lancer l'initialisation
+// On lance le tout
 initialiserJeu();
+elements.selectNiveau.setAttribute('data-value', elements.selectNiveau.value);

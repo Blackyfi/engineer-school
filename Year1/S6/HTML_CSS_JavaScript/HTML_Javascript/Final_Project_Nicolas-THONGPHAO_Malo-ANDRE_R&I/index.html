@@ -3,70 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de clavier super trop cool</title>
+    <title>Tape-Mots Infernal</title>
     <link rel="stylesheet" href="./styles/style.css">
     <script src="./scripts/script.js" defer></script>
 </head>
 <body>
-    <!-- trucQuiCacheTout pour le pseudo -->
-    <div id="username-trucQuiCacheTout" class="trucQuiCacheTout">
-        <div class="trucQuiCacheTout-content">
+    <!-- Modal du pseudo -->
+    <div id="pourEntrerLePseudo" class="trucQuiCachePourPseudo">
+        <div class="boite-PseudoPourEntrer">
             <h2>Entrez votre pseudo</h2>
-            <input type="text" id="username-input" placeholder="Votre pseudo...">
-            <button id="submit-username">Commencer</button>
+            <input type="text" id="champ-pseudo" placeholder="Votre pseudo...">
+            <button id="valider-pseudo">Commencer</button>
         </div>
     </div>
 
-    <div class="container">
-        <div class="game-header">
-            <img src="./images/logo_em.jpg" alt="Logo Enseirb-Matmeca" class="school-logo">
-            <h1>Jeu de clavier super trop cool</h1>
+    <div class="conteneur">
+        <div class="entete-jeu">
+            <img src="./images/logo_em.jpg" alt="Logo Enseirb-Matmeca" class="logo-ecole">
+            <h1>Le Tape-Mots éternel</h1>
         </div>
 
-        <div class="stats">
-            <div class="score">Score: <span id="score">0</span></div>
-            <div class="time">Temps: <span id="timer">60</span>s</div>
-            <div class="player">Joueur: <span id="player-name"></span></div>
+        <div class="statistiques">
+            <div class="score">Score : <span id="compteur-score">0</span></div>
+            <div class="temps">Temps : <span id="chronometre">60</span>s</div>
+            <div class="joueur">Joueur : <span id="nom-joueur"></span></div>
         </div>
 
-        <div class="game-settings">
-            <select id="difficulty">
+        <div class="parametres-jeu">
+            <select id="niveau">
                 <option value="facile">Facile</option>
                 <option value="moyen">Moyen</option>
                 <option value="difficile">Difficile</option>
             </select>
-            <select id="game-duration">
+            <select id="duree-partie">
                 <option value="20">20 secondes</option>
                 <option value="60">60 secondes</option>
                 <option value="120">120 secondes</option>
             </select>
-            <select id="Words">
-                <option value="Neutre">Neutre</option>
-                <option value="Pays">Pays</option>
-                <option value="Animaux">Animaux</option>
-                <option value="Fruits_et_legumes">Fruits et légumes</option>
+            <select id="theme-mots">
+                <option value="general">Général</option>
+                <option value="pays">Pays</option>
+                <option value="animaux">Animaux</option>
+                <option value="cuisine">Fruits et légumes</option>
             </select>
-            <div class="audio-control">
-                <input type="checkbox" id="toggleMusic" checked>
-                <label for="toggleMusic">Musique</label>
+            <div class="controle-audio">
+                <input type="checkbox" id="activer-musique" checked>
+                <label for="activer-musique">Musique</label>
             </div>
-            <button id="startGame">Démarrer</button>
-            <button id="pauseGame" class="orange-button">Pause</button>
-            <button id="stopGame" class="red-button">Arrêter</button>
+            <button id="demarrer">Démarrer</button>
+            <button id="pause" class="bouton-orange">Pause</button>
+            <button id="arreter" class="bouton-rouge">Arrêter</button>
         </div>
 
-        <audio id="gameMusic" loop>
-            <source src="./audios/game-music.mp3" type="audio/mp3">
+        <audio id="musique-jeu" loop>
+            <source src="../audios/Doom Eternal OST - The Only Thing They Fear Is You (Mick Gordon) [Doom Eternal Theme].mp3" type="audio/mp3">
         </audio>
 
-        <div class="game-area">
-            <div id="words-container"></div>
-            <input type="text" id="word-input" placeholder="Tapez ici...">
+        <div class="zone-jeu">
+            <div id="zone-mots"></div>
+            <input type="text" id="saisie-mot" placeholder="Tapez ici...">
         </div>
 
-        <div class="high-scores">
+        <div class="tableau-scores">
             <h2>Meilleurs Scores</h2>
-            <ol id="highScoresList"></ol>
+            <ol id="liste-scores"></ol>
         </div>
     </div>
 </body>
