@@ -46,10 +46,18 @@
                 <option value="Animaux">Animaux</option>
                 <option value="Fruits_et_legumes">Fruits et légumes</option>
             </select>
+            <div class="audio-control">
+                <input type="checkbox" id="toggleMusic" checked>
+                <label for="toggleMusic">Musique</label>
+            </div>
             <button id="startGame">Démarrer</button>
             <button id="pauseGame" class="orange-button">Pause</button>
             <button id="stopGame" class="red-button">Arrêter</button>
         </div>
+
+        <audio id="gameMusic" loop>
+            <source src="./audios/game-music.mp3" type="audio/mp3">
+        </audio>
 
         <div class="game-area">
             <div id="words-container"></div>

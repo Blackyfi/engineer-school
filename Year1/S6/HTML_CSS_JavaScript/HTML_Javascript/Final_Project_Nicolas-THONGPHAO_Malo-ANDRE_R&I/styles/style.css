@@ -280,6 +280,61 @@ button:hover {
     border-bottom: 1px solid #ff4444;
 }
 
+
+
+
+
+/* Musique de Doom Eternal OST 22 =), un banger */
+.audio-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background-color: #2a2a2a;
+    border: 2px solid #ff4444;
+    border-radius: 4px;
+    color: #ff6b6b;
+}
+
+.audio-control input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ff4444;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    position: relative;
+}
+
+.audio-control input[type="checkbox"]:checked {
+    background-color: #ff4444;
+}
+
+.audio-control input[type="checkbox"]:checked::before {
+    content: "✓";
+    position: absolute;
+    color: #1a1a1a;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.audio-control label {
+    cursor: pointer;
+    font-family: 'DoomFont', Arial, sans-serif;
+}
+
+
+
+
+
+
+
+
+
 @media (max-width: 768px) {
     .container {
         padding: 16px;
