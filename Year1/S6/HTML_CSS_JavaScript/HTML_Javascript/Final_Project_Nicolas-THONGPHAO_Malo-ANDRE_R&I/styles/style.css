@@ -1,3 +1,22 @@
+/* Importation de la police Doom */
+@font-face {
+    font-family: 'DoomFont';
+    src: url('https://fontmeme.com/fonts/doom-font.ttf') format('truetype');
+}
+
+/* Animations pour l'effet de feu */
+@keyframes fireMove {
+    0% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.1); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes fireColor {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* Style général */
 * {
     margin: 0;
@@ -7,8 +26,17 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
+    background-image: url('../images/Doom-Eternal-PS4-Wallpapers-02.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    color: #ff6b6b;
+    text-shadow: 0 0 5px #ff0000;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
 /* Style du trucQuiCacheTout */
@@ -19,14 +47,15 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 1000;
 }
 
 .trucQuiCacheTout-content {
-    background-color: white;
+    background-color: #1a1a1a;
     padding: 32px;
     border-radius: 10px;
+    border: 2px solid #ff4444;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -38,15 +67,21 @@ body {
     margin: 16px 0;
     padding: 8px;
     width: 100%;
+    background-color: #2a2a2a;
+    border: 1px solid #ff4444;
+    color: #ff6b6b;
 }
 
 /* Style du conteneur principal */
 .container {
-    max-width: 800px;
-    margin: 32px auto;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
     padding: 32px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+    overflow: hidden;
 }
 
 /* Style de l'en-tête */
@@ -62,13 +97,20 @@ body {
     margin-right: 16px;
 }
 
+h1, h2, select, .stats {
+    font-family: 'DoomFont', Arial, sans-serif;
+    color: #ff4444;
+    text-transform: uppercase;
+}
+
 /* Style des statistiques */
 .stats {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     gap: 32px;
-    margin-top: 16px;
+    margin: 16px 0;
     font-size: 19.2px;
+    flex-wrap: wrap;
 }
 
 /* Style des paramètres du jeu */
@@ -76,38 +118,73 @@ body {
     display: flex;
     justify-content: center;
     gap: 16px;
-    margin-bottom: 32px;
+    margin: 32px 0;
+    flex-wrap: wrap;
 }
 
 select, button {
-    padding: 8px 16px; 
+    padding: 8px 16px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    background-color: #2a2a2a;
+    border: 2px solid #ff4444;
     border-radius: 4px;
     cursor: pointer;
+    color: #ff6b6b;
+    position: relative;
+}
+
+/* Style spécial pour le sélecteur de difficulté quand "difficile" est sélectionné */
+select#difficulty {
+    transition: all 0.3s ease;
+}
+
+select#difficulty[data-value="difficile"] {
+    background: linear-gradient(-45deg, #ff4400, #ff8800, #ff0000, #ff6600);
+    background-size: 400% 400%;
+    animation: fireColor 3s ease infinite;
+    border-color: #ff8c00;
+    color: white;
+    text-shadow: 
+        0 0 10px #ff0000,
+        0 0 20px #ff4400,
+        0 0 30px #ff8800;
+    box-shadow: 
+        0 0 10px #ff4400,
+        0 0 20px #ff0000;
+}
+
+select#difficulty[data-value="difficile"]::after {
+    content: "🔥";
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: fireMove 1s ease-in-out infinite;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    transition: background-color 0.3s;
+    background-color: #4a0000;
+    color: #ff4444;
+    border: 2px solid #ff4444;
+    transition: all 0.3s;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #ff4444;
+    color: #000;
+    box-shadow: 0 0 10px #ff4444;
 }
 
 .red-button {
-    background-color: #ff4444;
+    background-color: #660000;
 }
 
 .red-button:hover {
-    background-color: #cc0000;
+    background-color: #ff0000;
 }
 
 .orange-button {
-    background-color: #ffa500;
+    background-color: #663300;
 }
 
 .orange-button:hover {
@@ -116,44 +193,58 @@ button:hover {
 
 /* Style de la zone de jeu */
 .game-area {
-    margin-bottom: 32px;
+    margin: 32px 0;
 }
 
 #words-container {
-    min-height: 200px;
+    height: 400px;
     padding: 16px;
     margin-bottom: 16px;
-    border: 2px solid #eee;
+    border: 2px solid #ff4444;
     border-radius: 4px;
     position: relative;
+    background-color: rgba(0, 0, 0, 0.6);
+    overflow: hidden;
 }
 
 .word {
     display: inline-block;
     margin: 8px;
     padding: 8px;
-    background-color: #e9ecef;
+    background-image: url('../images/Doomimpfront-ezgif.com-webp-to-gif-converter.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #ff4444;
+    font-weight: bold;
     border-radius: 4px;
     animation: slideDown 10s linear;
     position: absolute;
+    min-width: 80px;
+    min-height: 80px;
+    text-align: center;
+    text-shadow: 2px 2px 4px #000;
 }
 
 @keyframes slideDown {
     from { top: 0; }
-    to { top: calc(100% - 40px); }
+    to { top: calc(100% - 80px); }
 }
 
 #word-input {
     width: 100%;
-    padding: 16px; 
-    font-size: 19.2px; 
-    border: 2px solid #ddd;
+    padding: 16px;
+    font-size: 19.2px;
+    background-color: #2a2a2a;
+    border: 2px solid #ff4444;
     border-radius: 4px;
+    color: #ff6b6b;
 }
 
 #word-input:focus {
     outline: none;
-    border-color: #4CAF50;
+    border-color: #ff0000;
+    box-shadow: 0 0 10px #ff4444;
 }
 
 /* Style des meilleurs scores */
@@ -168,15 +259,47 @@ button:hover {
 #highScoresList {
     list-style-position: inside;
     padding: 16px;
-    background-color: #f8f9fa;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 2px solid #ff4444;
     border-radius: 4px;
 }
 
 .word.expired {
-    background-color: #ff6b6b;
-    color: white;
+    background-color: #ff0000;
+    color: #fff;
 }
 
 .paused-score {
     color: #ffa500;
+}
+
+.score-item {
+    color: #ff6b6b;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-bottom: 1px solid #ff4444;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .game-settings {
+        gap: 8px;
+    }
+    
+    select, button {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+    
+    .stats {
+        font-size: 16px;
+        gap: 16px;
+    }
+    
+    #words-container {
+        height: 300px;
+    }
 }
