@@ -1,7 +1,7 @@
 /* Police Doom */
 @font-face {
     font-family: 'DoomFont';
-    src: url('https://fontmeme.com/fonts/doom-font.ttf') format('truetype');
+    src: url('../fonts/EternalUi2Bold-nRwLg.ttf') format('truetype');
 }
 
 /* Animation de flammes */
@@ -39,7 +39,7 @@ body {
     padding: 20px;
 }
 
-/* Modal */
+/* le machin pour entrer le pseudo et cacher le jeux */
 .trucQuiCachePourPseudo {
     display: block;
     position: fixed;

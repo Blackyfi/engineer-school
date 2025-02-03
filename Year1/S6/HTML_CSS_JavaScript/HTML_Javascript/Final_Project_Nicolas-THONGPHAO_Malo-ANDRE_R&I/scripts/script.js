@@ -291,7 +291,7 @@ function genererMots(theme) {
     
     // Sélection du dictionnaire selon le thème
     switch(theme) {
-        case 'neutre':
+        case 'general':
             dictionnaire = Neutre;
             break;
         case 'pays':
@@ -300,7 +300,7 @@ function genererMots(theme) {
         case 'animaux':
             dictionnaire = Animaux;
             break;
-        case 'fruits-legumes':
+        case 'cuisine':
             dictionnaire = Fruits_et_Legumes;
             break;
         default:
@@ -339,8 +339,8 @@ function verifierMot(event) {
     );
 
     if (motTrouve) {
-        const elements = document.querySelectorAll('.mot');
-        elements.forEach(element => {
+        const motsElements = document.querySelectorAll('.mot');
+        motsElements.forEach(element => {
             if (element.textContent.toLowerCase() === motTape) {
                 element.remove();
             }
@@ -352,12 +352,12 @@ function verifierMot(event) {
 
         // Attribution des points basée sur la longueur du mot original
         etatJeu.score += motTrouve.length;
-        elements.score.textContent = etatJeu.score;
+        document.getElementById('compteur-score').textContent = etatJeu.score;
 
+        // Réinitialisation du champ de saisie après un court délai
         event.target.value = '';
     }
 }
-
 function basculerPause() {
     etatJeu.enPause = !etatJeu.enPause;
     if (etatJeu.enPause) {
