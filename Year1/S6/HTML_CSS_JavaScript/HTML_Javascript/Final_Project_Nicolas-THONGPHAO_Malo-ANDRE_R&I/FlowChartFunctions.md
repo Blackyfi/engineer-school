@@ -1,20 +1,30 @@
 ```mermaid
 flowchart TD
-    A[Demarrage - initialiserJeu] 
-    B[Fenetre Pseudo]
-    C[Validation - validerPseudo]
-    D[Interface Principale]
-    E[Configuration]
-    F[Partie en Cours]
-    G[Fin de Partie]
+    A[initialiserJeu]
+    B[initialiserAudio]
+    C[mettreAJourEtatMusique]
+    D[validerPseudo]
+    E[demarrerPartie]
+    F[lancerChronometre]
+    G[genererMots]
+    H[creerElementMot]
+    I[verifierMot]
+    J[basculerPause]
+    K[arreterPartie]
+    L[terminerPartie]
+    M[mettreAJourTableauScores]
+    N[afficherTableauScores]
 
     A --> B
     B --> C
-    C --> D
-    C --> |Pseudo invalide| B
+    A --> N
     D --> E
-    E --> |Demarrer| F
-    F --> |Temps ecoule| G
-    F --> |Arreter| D
-    F --> |Pause| F
-    G --> D
+    E --> F
+    E --> G
+    G --> H
+    I --> M
+    J --> C
+    K --> N
+    K --> M
+    L --> M
+    M --> N
