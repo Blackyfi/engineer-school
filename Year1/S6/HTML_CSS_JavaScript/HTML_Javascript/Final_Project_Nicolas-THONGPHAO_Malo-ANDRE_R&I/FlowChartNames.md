@@ -1,3 +1,4 @@
+```mermaid
 flowchart TD
     A[Demarrage - initialiserJeu] 
     B[Fenetre Pseudo]
